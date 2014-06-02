@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=1024, user-scalable=no">
+
+  <title>Identification of human control during perturbed walking</title>
+
+  <!-- Required stylesheet -->
+  <link rel="stylesheet" media="screen" href="deck.js/core/deck.core.css">
+
+  <!-- Extension CSS files go here. Remove or add as needed. -->
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/goto/deck.goto.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/menu/deck.menu.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/navigation/deck.navigation.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/status/deck.status.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/scale/deck.scale.css">
+
+  <!-- Style theme. More available in /themes/style/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="deck.js/themes/style/swiss.css">
+
+  <!-- Transition theme. More available in /themes/transition/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="deck.js/themes/transition/horizontal-slide.css">
+
+  <!-- Basic black and white print styles -->
+  <link rel="stylesheet" media="print" href="deck.js/core/print.css">
+
+  <!-- Required Modernizr file -->
+  <script src="deck.js/modernizr.custom.js"></script>
+
+  <!-- Custom stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- MathJax -->
+  <!-- https://github.com/mathjax/MathJax/wiki/LFAQ----less-frequently-asked-questions#how-can-i-configure-a-local-fallback-for-the-cdn -->
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null }});<\/script>
+  <script src="MathJax/MathJax.js?config=TeX-AMS_HTML-full"><\/ script>')</script>
+
+</head>
+
+<body>
+  <div class="deck-container">
+
+    <!-- Begin slides. Just make elements with a class of slide. -->
+
+
+    <section class="slide">
+      <h2>Identification of human control during walking</h2>
+      <h3>Jason K. Moore <small>j.k.moore19@csuohio.edu</small></h3>
+      <h3>Sandra K. Hnat</h3>
+      <h3>Antonie J. van den Bogert</h3>
+      <p>Human Motion and Control Laboratory <a
+        href="http://hmc.csuohio.edu">[hmc.csuohio.edu]</a></p>
+      <p>Cleveland State University, Cleveland, Ohio, USA</p>
+      <p>June 6, 2014</p>
+      <footer style="position:absolute;bottom:0;font-size:75%;">
+        <a href="http://tudelft.nl">TU Delf
+          Robotics Talk 2014</a>, Delft, Netherlands
+      </footer>
+    </section>
+    <!--
+    Hi, My name is Jason Moore and I'm currently a postdoctoral researcher in
+    Ton van den Bogert's human motion and control lab at Cleveland State
+    University. Today I'm going to tell you about our initial work on
+    identifying the control systems in able bodied humans during walking and
+    potential application to powered exoskeletons.
+    -->
+
+    <section class="slide">
+      <h2>Lower Extremity Exoskeletons</h2>
+      <video width="640" height="480" controls>
+        <source src="vid/exoskeletons.mp4" type="video/mp4">
+        <source src="vid/exoskeletons.ogg" type="video/ogg">
+      Your browser does not support the video tag.
+      </video>
+      <p><small>Clips collected from <a href="http://youtu.be/-bYYmZNxaZk">one</a>, <a
+          href="http://youtu.be/bhCAkUMQ5GA">two</a>, <a
+          href="http://youtu.be/XpVVEYOkj34">three</a>, and <a
+          href="http://youtu.be/SS1MFoz1Cp0">four</a>.</small></p>
+      <!--
+      http://youtu.be/-bYYmZNxaZk
+      http://youtu.be/bhCAkUMQ5GA
+      http://youtu.be/XpVVEYOkj34
+      http://youtu.be/SS1MFoz1Cp0
+      -->
+    </section>
+    <!--
+    I'll start with a short video that shows a few of examples of exoskeletons
+    that have been developed to help people with spinal cord injuries walk with
+    mechanical assistance. These types of devices are remarkable in that they
+    allow a paralyzed person to take steps again, but there is still a lot of
+    work to be done to provide both natural gait and balance. We are interested
+    in identifying control schemes used by able-bodied walkers and mapping
+    those to the CPU, sensor and actuator network inside these powered
+    exoskeletons.
+    -->
+
+    <section class="slide">
+      <h2>Idealized Gait Feedback Control</h2>
+      <img src="img/control-system-words.png" />
+    </section>
+    <!--
+    We start by modeling the human during cyclic walking as a
+    multi-input/output feeback system. The human plant is driven by joint
+    torques and can be perturbed by external inputs. The state is sensed, the
+    kinematics in our case, and subtracted from a nominal or open loop solution
+    to cyclic gait. The controller then computes the additive inputs to the
+    nominal or open loop joint torques to drive the walker back to the nominal
+    cyclic walking pattern.
+    -->
+
+    <section class="slide">
+      <h2>Idealized Gait Feedback Control</h2>
+      <img src="img/control-system-variables.png" />
+      <table class="side-by-side">
+        <tr>
+          <td style="padding: 30px;">
+            <h3>Estimated</h3>
+            <ul>
+              <li>\(\varphi\): Phase of gait cycle</li>
+              <li>\(\mathbf{s}(\varphi)\): Joint angles and rates</li>
+              <li>\(\mathbf{m}(\varphi)\): Joint torques</li>
+              <li>\(w(t)\): Random belt speed</li>
+            </ul>
+          </td>
+          <td style="padding: 30px;">
+            <h3>Unknown</h3>
+            <ul>
+              <li>\(\mathbf{K}(\varphi)\): Matrix of feedback gains</li>
+              <li>\(\mathbf{s}_0(\varphi)\): Open loop joint angles and rates</li>
+              <li>\(\mathbf{m}_0(\varphi)\): Open loop joint torques</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </section>
+    <!--
+    We approach the identification of the controller from a direct
+    identification-like method. We assume that we can have good "measured"
+    estimates of the joint angles, rates, and torques throughout the phase of
+    the gait cycle, phi. To ensure that feedback control is used, we perturb
+    the plant (the human) with random external perturbations, which are also
+    measured. Our goal being to find a feedback gain matrix that relates the
+    sensor error to the plant inputs.
+    -->
+
+    <section class="slide">
+      <h2>Controller Equations</h2>
+      <p>
+      \[
+      \mathbf{m}(t) = \mathbf{m}_0(\varphi) + \mathbf{K}(\varphi) [\mathbf{s}_0(\varphi) - \mathbf{s}(t)] \\
+      \]
+
+      \[
+      \mathbf{m}(t) = \mathbf{m}_0(\varphi) + \mathbf{K}(\varphi) \mathbf{s}_0(\varphi) - \mathbf{K}(\varphi) \mathbf{s}(t) \\
+      \]
+      </p>
+
+      <h3>Linear Form</h3>
+
+      <p>
+      \[
+      \mathbf{m}(t) = \mathbf{m}^*(\varphi) - \mathbf{K}(\varphi) \mathbf{s}(t)
+      \]
+      </p>
+      <footer>
+        <a href="http://nbviewer.ipython.org/github/moorepants/walking-sys-id/blob/master/src/notebooks/walking_least_squares.ipynb">
+          The Maths
+        </a>
+      </footer>
+    </section>
+    <!--
+    Since we can't measure the nomimal joint kinematics or joint torques we can
+    use a little equation rearranging to put the equation in a form that
+    relates inputs to the controller to its outputs into a form that makes it
+    linear in the gains and a term I will call m*, which equals the nominal
+    torque if feedback is zero. This form can generalize to any number and type
+    of sensors and control inputs.
+    -->
+
+    <section class="slide">
+      <h2>Map Human Control to Exoskeleton</h2>
+      <h3>Sensors</h3>
+      <p>Assume that a lower limb exoskeleton can sense relative orientation
+      and rate of the right and left planar ankle, knee, and hip angles.</p>
+      <p>
+        \(\mathbf{s}(t) = \begin{bmatrix} s_1 & \dot{s}_1 & \ldots & s_q & \dot{s}_q \end{bmatrix} \) where \(q=6\)
+      </p>
+      <h3>Controls (plant inputs)</h3>
+      <p>Assume that the exoskeleton can generate planar ankle, knee, and hip joint
+      torques.</p>
+      <p>
+        \(\mathbf{m}(t) = \begin{bmatrix}m_1 & \ldots & m_q \end{bmatrix} \) where
+        \(q=6\)
+      </ul>
+      <h3>Gain Matrix [Proportional-Derivative Control]</h3>
+      <p>
+        \(
+        \mathbf{K}(\varphi) =
+          \begin{bmatrix}
+            k(\varphi)_{s_1} & k(\varphi)_{\dot{s_1}} & 0                & 0                      & 0      & \ldots           & 0\\
+            0                & 0                      & k(\varphi)_{s_2} & k(\varphi)_{\dot{s_2}} & 0      & \ldots           & \vdots\\
+            0                & 0                      & 0                & 0                      & \ddots & 0                & 0\\
+            0                & 0                      & 0                & \ldots                 & 0      & k(\varphi)_{s_q} & k(\varphi)_{\dot{s}_q} \\
+
+
+          \end{bmatrix}
+        \)
+
+    </section>
+    <!--
+    From now on I'll use a simplified controller model. The idea is to try to
+    extract a controller for sensors and control inputs available on an exoskeleton
+    from data collected from an able bodied human. So we formulate a simple
+    2D PD controller that feeds back angle and rate at the ankle, knee, and hip
+    locally to produce torque at that joint.
+    -->
+
+    <section class="slide">
+      <h2>Linear Least Squares</h2>
+      <p>With \(n\) time samples in each gait cycle and \(m\) steps there are
+      \(mnq\) equations and  which can be used to solve for the \(nq(2q+1)\)
+      unknowns: \(\mathbf{m}^*(\varphi)\) and \(\mathbf{K}(\varphi)\). This is
+      a classic overdetermined system of linear equations that can be solved
+      with linear least squares.</p>
+      <p>
+        \[\mathbf{A}\mathbf{x}=\mathbf{b}\]
+      </p>
+      <ul>
+        <li>\(\mathbf{A}\): joint angles and rates</li>
+        <li>\(\mathbf{b}\): joint torques</li>
+        <li>\(\mathbf{x}\): \(\mathbf{K}\) and \(\mathbf{m}^*\)</li>
+      </ul>
+      <p>
+        \[\mathbf{x}=(\mathbf{A}^T\mathbf{A})^{-1}\mathbf{A}^T\mathbf{b}\]
+      </p>
+    </section>
+    <!--
+    Given that we can estimate the joint angles, rates, and torques from mocap
+    and force data during walking we can formulate the problem into a linear
+    least squares problem in which we can solve for the gains given enough
+    data.
+    -->
+
+    <section class="slide">
+      <h2>Experimental Protocol</h2>
+      <ul>
+        <li>Full body motion capture: 47 markers</li>
+        <li>Dual 6 DoF ground reaction forces</li>
+        <li>8 minutes (500+ steps) of longtidunal perturbations</li>
+        <li>Three walking speeds: 0.8, 1.2, 1.6 m/s</li>
+        <li>10+ subjects</li>
+        <li>Longitudinal perturbations</li>
+      </ul>
+    </section>
+    <!--
+    So we set out to collect a larger than normal set of data from able bodied
+    walkers using a modern gait lab. We collect approximately 500 steps of data
+    at 100hz over 8 minutes. The key addition here is that we longitudinaly
+    perturb the subject while walking to ensure that more controll that normal
+    is required to balance.
+    -->
+
+    <section class="slide">
+      <h2>Random Belt Speed Variations</h2>
+      <img src="img/belt-speed.png" />
+    </section>
+    <!--
+    The belt speed varies randomly around the nominal speed.
+    -->
+
+    <section class="slide">
+      <h2>Random Belt Speed Variations</h2>
+      <video width="640" height="480" controls>
+        <source src="vid/longitudinal-perturb-1.2-mps.mp4" type="video/mp4">
+        <source src="vid/longitudinal-perturb-1.2-mps.ogg" type="video/ogg">
+      Your browser does not support the video tag.
+      </video>
+    </section>
+    <!--
+    This video shows a subject walking while being perturbed. Notice that each
+    step is slightly different than the previous.
+    -->
+
+    <section class="slide">
+      <h2>Measurement Variations</h2>
+      <img src="img/right-angle-variation-T019.png" />
+    </section>
+    <section class="slide">
+      <h2>Measurement Variations</h2>
+      <img src="img/right-moment-variation-T019.png" />
+    </section>
+    <!--
+    Our 2D kinematic and kinetic estimates for each step look something like
+    this. Notice that the variation in the step is much larger than unperturbed
+    walking.
+    -->
+
+    <section class="slide">
+      <h2>Gains: v=0.8 m/s</h2>
+      <img src="img/mean-gains-0.8.png" />
+    </section>
+    <!--
+    I then take 3/4's of each trial and cram the data into the least squares
+    solver and it produces some gait phase scheduled gains. This graph shows
+    the mean gain curves as a function of phase in the gait cycle for the right
+    and left legs of 4 subjects walking at 0.8 m/s. The graphs show the gains
+    that map the measurement kinematic variable to the torque in the same
+    joint. We see that different subjects have similar gain profiles, although
+    there is some variation. All but the hip rate feeback term has zero gain in
+    the swing phase and larger gains in the stance phase. Notice too that
+    both negative and positive feedback is used during the gait cycle.
+    -->
+
+    <section class="slide">
+      <h2>Gains: v=1.2 m/s</h2>
+      <img src="img/mean-gains-1.2.png" />
+    </section>
+    <!--
+    We see similar patterns as the walking speed increases. In this case, to
+    1.2 m/s.
+    -->
+
+    <section class="slide">
+      <h2>Gain variation with speed</h2>
+      <img src="img/mean-gains-vs-speed.png" />
+    </section>
+    <!--
+    We can also take a look how the mean gains across subjects vary with
+    respect to speed. The solid lines are the slow speed, the dashed the
+    medium, and the dotted the high speed walking. Some curves seem to vary
+    little with speed and others show some variation: increasing/decreasing
+    with speed or drastic change from low to high speed. We see a decidely
+    different behavior in the knee rate gain during stance at the low speed.
+    -->
+
+    <section class="slide">
+      <h2>How good is the model?</h2>
+      <img src="img/validation-019.png" />
+    </section>
+    <!--
+    So you may be wondering how good this simple 2D PD control model is. Well I
+    am too. At this point the best thing I can say about it, is that given an
+    independent set of joint angles and rates (the last 1/4 of each trial) the
+    model can predict over 65% of the variance in the estimated torque data
+    This plot shows the joint torques in each joint and each leg, both the
+    measured values and the predicted values, along with the percent variance
+    accounted for. The further the joint from the force plates the poorer the
+    prediction.
+    -->
+
+    <section class="slide">
+      <h2>Summary</h2>
+      <ul>
+        <li>Perturbations must be significantly higher that internal system
+        noise to have any hope of estimating control in this fashion.</li>
+        <li>Similar gain patterns in each leg.</li>
+        <li>Similar gain patterns and magnitudes in different subjects.</li>
+        <li>The model can predict the joint torques for independent data.</li>
+      </ul>
+    </section>
+    <!--
+    So to summarize, we've used a simple control model structure and a large
+    set of data to tease out numerical values for the scheduled gains during
+    walking by longitudinally perturbing the subjects. We see similar patterns
+    in the gains across subjects and are able to predict joint torques very
+    well.
+    -->
+
+    <section class="slide">
+      <h2>Future</h2>
+      <ul>
+        <li>Explore full \(\mathbf{K}\) matrix.</li>
+        <li>Add in time delays.</li>
+        <li>Remove clock from controller.</li>
+        <li>Non-linear control models: e.g. neural network.</li>
+        <li>Use indirect system identification approach with plant model.</li>
+        <li>Try out the controller on a simulation that has open loop control.</li>
+        <li>Try out the controller on the Indego exoskeleton.</li>
+      </ul>
+    </section>
+    <!--
+    We have a lot more to do here before we make solid conclusions. The data I
+    showed was rather preliminary. We plan to explore more gain
+    matrices, add time delays for neural processing, remove the scheduling and
+    try to make the gains a function of state instead of phase, look into more
+    complex control models, try out indirect ID, and try out the controllers
+    in simulation and an actual exoskeleton.
+    -->
+
+    <section class="slide">
+      <h2>Tutorial</h2>
+      <h3>Simulation and Control of Biomechanical Systems with Python</h3>
+      <p>Tonight at 6pm</p>
+      <p>Chemistry Computer Lab in the Whitby building on the 2nd floor. Next
+      to ASEC (previous location).</p>
+      <a
+        href="https://github.com/pydy/pydy-tutorial-pycon-2014">https://github.com/pydy/pydy-tutorial-pycon-2014</a>
+      <img src="img/human-balance-diagram.png" />
+    </section>
+    <!--
+    Here is a quick plug for the tutorial we will be giving tonight on
+    simulation and control of biomechanical systems using the Python
+    programming language. There may be some slots left, talk to the conference
+    organizers if you are interested in joining.
+    -->
+
+    <section class="slide">
+      <h2>Information</h2>
+      <h3>Contact</h3>
+      <ul>
+        <li>HMC Lab: <a href="http://hmc.csuohio.edu">hmc.csuohio.edu</a></li>
+        <li>My website: <a href="http://moorepants.info">moorepants.info</a></li>
+        <li>Email: j.k.moore@csuohio.edu</li>
+      </ul>
+      <h3>Slides</h3>
+      <ul>
+        <li><a href="https://github.com/moorepants/MASB2014">github.com/moorepants/MASB2014</a></li>
+      </ul>
+      <h3>Source code for this analysis</h3>
+      <ul>
+        <li><a href="https://github.com/moorepants/walking-sys-id">github.com/moorepants/walking-sys-id</a></li>
+        <li><a href="https://github.com/csu-hmc/Gait-Analysis-Toolkit">github.com/csu-hmc/Gait-Analysis-Toolkit</a></li>
+      </ul>
+      <h3>Data</h3>
+      <ul>
+        <li>On its way!</li>
+      </ul>
+    </section>
+
+
+    <!-- End slides. -->
+
+    <!-- Begin extension snippets. Add or remove as needed. -->
+
+    <!-- deck.navigation snippet -->
+    <div aria-role="navigation">
+      <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+      <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+    </div>
+
+    <!-- deck.status snippet -->
+    <p class="deck-status" aria-role="status">
+      <span class="deck-status-current"></span>
+      /
+      <span class="deck-status-total"></span>
+    </p>
+
+    <!-- deck.goto snippet -->
+    <form action="." method="get" class="goto-form">
+      <label for="goto-slide">Go to slide:</label>
+      <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+      <datalist id="goto-datalist"></datalist>
+      <input type="submit" value="Go">
+    </form>
+
+    <!-- End extension snippets. -->
+  </div>
+
+<!-- Required JS files. -->
+<script src="deck.js/jquery.min.js"></script>
+<script src="deck.js/core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="deck.js/extensions/menu/deck.menu.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/status/deck.status.js"></script>
+<script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck. You can put this in an external file if desired. -->
+<script>
+  $(function() {
+    $.deck('.slide');
+  });
+</script>
+</body>
+</html>
