@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=1024, user-scalable=no">
 
-  <title>Identification of human control during perturbed walking</title>
+  <title>Identification of human control during walking</title>
 
   <!-- Required stylesheet -->
   <link rel="stylesheet" media="screen" href="deck.js/core/deck.core.css">
@@ -49,8 +49,6 @@
     <section class="slide">
       <h2>Identification of human control during walking</h2>
       <h3>Jason K. Moore <small>j.k.moore19@csuohio.edu</small></h3>
-      <h3>Sandra K. Hnat</h3>
-      <h3>Antonie J. van den Bogert</h3>
       <p>Human Motion and Control Laboratory <a
         href="http://hmc.csuohio.edu">[hmc.csuohio.edu]</a></p>
       <p>Cleveland State University, Cleveland, Ohio, USA</p>
@@ -69,12 +67,34 @@
     -->
 
     <section class="slide">
+      <h2>Collaborators</h2>
+      <h3>Sandra K. Hnat</h3>
+      <h3>Antonie J. van den Bogert</h3>
+    </section>
+
+    <section class="slide">
       <h2>Lower Extremity Exoskeletons</h2>
-      <video width="640" height="480" controls>
-        <source src="vid/exoskeletons.mp4" type="video/mp4">
-        <source src="vid/exoskeletons.ogg" type="video/ogg">
-      Your browser does not support the video tag.
-      </video>
+      <table class="side-by-side">
+        <tr>
+          <td>
+            <video width="640" height="480" controls>
+              <source src="vid/exoskeletons.mp4" type="video/mp4">
+              <source src="vid/exoskeletons.ogg" type="video/ogg">
+            Your browser does not support the video tag.
+            </video>
+          </td>
+          <td>
+            <h3>Desired improvements</h3>
+            <ul>
+              <li>Natural gait patterns</li>
+              <li>Balance</li>
+            </ul>
+            <h3>Additional Benefits</h3>
+            <p>Quantification of control can possibly be used to assess
+            subjects</p>
+          </td>
+        <tr>
+      </table>
       <p><small>Clips collected from <a href="http://youtu.be/-bYYmZNxaZk">one</a>, <a
           href="http://youtu.be/bhCAkUMQ5GA">two</a>, <a
           href="http://youtu.be/XpVVEYOkj34">three</a>, and <a
@@ -98,6 +118,15 @@
     -->
 
     <section class="slide">
+      <h2>Nueromuscluar System</h2>
+      <img src="img/kearney-1990-control-diagram.png" />
+      <footer style="position:absolute;bottom:0;font-size:75%;">
+        Kearney and Hunter, “System Identification of Human Joint Dynamics.”,
+      1990.
+      </footer>
+    </section>
+
+    <section class="slide">
       <h2>Idealized Gait Feedback Control</h2>
       <img src="img/control-system-words.png" />
     </section>
@@ -113,7 +142,7 @@
 
     <section class="slide">
       <h2>Idealized Gait Feedback Control</h2>
-      <img src="img/control-system-variables.png" />
+      <img src="img/control-system-detailed.png" />
       <table class="side-by-side">
         <tr>
           <td style="padding: 30px;">
@@ -147,15 +176,65 @@
     -->
 
     <section class="slide">
+      <h2>Typical Gait Lab Measurements</h2>
+      <ul>
+        <li>Ground reaction loads at each foot</li>
+        <li>Inertial musculoskeletal marker positions</li>
+        <li>Body Segment Parameters</li>
+        <li>Body segment angular velocity</li>
+        <li>Point accelerations</li>
+        <li>Muscle activation: EMG</li>
+        <li>Walking (or belt) speed</li>
+      </ul>
+      <h2>Estimates</h2>
+      <ul>
+        <li>Joint torques</li>
+        <li>Joint angles, angular velocities, angular accelerations</li>
+        <li></li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>What sensors are likely most important for human gait control?</h2>
+      <ul>
+        <li>Proprioception: relative position of body parts, msucle spindles</li>
+        <li>Vestibular: semicircular canal: sangular rotation, oritlith: linear
+        acceleration (horizontal and veritical), gravity: all of
+        the head, , </li>
+        <li>Sight: earth relative position, etc</li>
+        <li>Touch: force on feet</li>
+      </ul>
+      <h2>Sensors available to external prosthetics</h2>
+      <ul>
+        <li>Relative joint position</li>
+        <li>Body fixed angular velocity</li>
+        <li>Body fixed point accelerations</li>
+        <li>Force transducers and presssure sensors</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Closed Loop System Identification</h2>
+      <p>Closed loop system id is possible, but one must be aware of several
+      issues. There are three common methods:</p>
+      <ul>
+        <li>Direct Approach</li>
+        <li>Indirect Approach</li>
+        <li>Joint Input-Output Approach</li>
+      </ul>
+      <p>If the direct method is used the external perturbations must be high
+      enough to bias the identification towards the controller, rather than the
+      inverse of the plant. (Kearny 1990, van der Kooij 2005)</p>
+    </section>
+
+    <section class="slide">
       <h2>Controller Equations</h2>
+      <img src="img/controller.png" />
       <p>
       \[
       \mathbf{m}(t) = \mathbf{m}_0(\varphi) + \mathbf{K}(\varphi) [\mathbf{s}_0(\varphi) - \mathbf{s}(t)] \\
       \]
 
-      \[
-      \mathbf{m}(t) = \mathbf{m}_0(\varphi) + \mathbf{K}(\varphi) \mathbf{s}_0(\varphi) - \mathbf{K}(\varphi) \mathbf{s}(t) \\
-      \]
       </p>
 
       <h3>Linear Form</h3>
@@ -164,8 +243,15 @@
       \[
       \mathbf{m}(t) = \mathbf{m}^*(\varphi) - \mathbf{K}(\varphi) \mathbf{s}(t)
       \]
+
+      where
+
+      \[
+      \mathbf{m}^*(t) = \mathbf{m}_0(\varphi) + \mathbf{K}(\varphi) \mathbf{s}_0(\varphi)
+      \]
       </p>
-      <footer>
+
+      <footer style="position:absolute;bottom:0;font-size:75%;">
         <a href="http://nbviewer.ipython.org/github/moorepants/walking-sys-id/blob/master/src/notebooks/walking_least_squares.ipynb">
           The Maths
         </a>
@@ -247,13 +333,19 @@
     <section class="slide">
       <h2>Experimental Protocol</h2>
       <ul>
-        <li>Full body motion capture: 47 markers</li>
-        <li>Dual 6 DoF ground reaction forces</li>
+        <li>Full body 3D motion capture: 47 markers <a href="#footnote-1">[1]</a></li>
+        <li>Dual 6 DoF force plates</li>
+        <li>2 minutes of unperturbed walking</li>
         <li>8 minutes (500+ steps) of longtidunal perturbations</li>
         <li>Three walking speeds: 0.8, 1.2, 1.6 m/s</li>
         <li>10+ subjects</li>
         <li>Longitudinal perturbations</li>
       </ul>
+
+      <footer style="position:absolute;bottom:0;font-size:75%;">
+        <p id="footnote-1">[1] Bogert et al., “A Real-Time System for Biomechanical
+          Analysis of Human Movement and Muscle Function.”</p>
+      </footer>
     </section>
     <!--
     So we set out to collect a larger than normal set of data from able bodied
@@ -283,6 +375,26 @@
     This video shows a subject walking while being perturbed. Notice that each
     step is slightly different than the previous.
     -->
+
+
+    <section class="slide">
+      <h2>Data Processing</h2>
+      <ol>
+        <li>Fill missing markers</li>
+        <li>Filter marker positions and ground reation loads 6 hz low pass
+          filter</li>
+        <li>Compute joint angles, rates, and torques using inverse
+          dynamics</li>
+        <li>Section data into variable duration gait cycles based on right foot
+          heelstrikes</li>
+        <li>Resample each gait cycle at 20 equally spaced samples</li>
+        <li>Construct the design matrix (regressor) and the output vector</li>
+        <li>Solve for \(\mathbf{m}^*(\varphi)\) and
+          \(\mathbf{K}(\varphi)\)</li>
+        <li>Compute regression statistics and visualize</li>
+      </ol>
+
+    </section>
 
     <section class="slide">
       <h2>Measurement Variations</h2>
