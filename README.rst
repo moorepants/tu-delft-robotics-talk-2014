@@ -1,6 +1,20 @@
 Outline
 =======
 
+Background
+---------
+- UCD and TU Delft
+- Identificatin of human control in the bicycle control task
+- Direct ID of the plant and indirect ID of the controller
+
+Literature Review
+-----------------
+
+- Standing: lots of papers
+- Gait: not so much...Rouse
+- Identifciation of human systems: Kearney
+- Reflexes during walking: electrical stimulation
+
 Impetus
 -------
 
@@ -11,14 +25,14 @@ Impetus
 Problem
 -------
 
-- What control algorithms are actually used during walking?
+- What control algorithms are actually used during walking? Only human data can
+  tell us.
 
 The System
 ----------
 
 - Show block diagram of generalized gait system (van der Kooij has a nice
   diagram)
-
 - Feedback? preview? delays?
 
 Closed Loop System Identification
@@ -38,6 +52,8 @@ Closed Loop System Identification
 
 - Indirect Approach
 - Joint Input-Ouput Approach
+
+- Show some of Samin's results
 
 Measurements
 ------------
@@ -83,10 +99,21 @@ Gain Results
 
 Model Validation
 
-Non-perturbed results
+Show that the unperturbed data gives similar results.
 
-Indetification of "fake" data
------------------------------
+Show the vaf results for the just m*, K and full K
+
+summary
+zero gains in the swign phase
+negative velocity gains do not make sense
+
+How far have we moved in the direction for the impetus. Can we put these gains
+in exoskeleton?
+
+piecewise set points for the others
+
+Indentification of "fake" data
+------------------------------
 
 Identification from Simulation
 ------------------------------
@@ -111,7 +138,6 @@ Optimal control approach
 2. Develop plant model
 3. Simulate model under 
 3. Cost function: minimize error in marker pos
-4. 
 
 
 - Title
@@ -131,3 +157,23 @@ Optimal control approach
 - Gain plots
 - Discussion
 - Announcement about tutorial
+
+
+DW2014 discussion talk
+
+- Is this a good way to design a feedback controller for walking?
+- Present our idea
+- Present other's methods
+- Does perturabtion needed?
+- Neural networks, time delays
+- Have to big data, random pertrub
+- Try to mimic
+- Are we really optimal? Should optimal control be the solution or should we
+  try to do what people do?
+- zero moment point, simbicon
+- How do people actually respond to pertrubations?
+- Infinity of controllers can produce the same jont and torque curves.
+- Do robotos use k
+
+TODO
+- Move Mathjax lib into this directory

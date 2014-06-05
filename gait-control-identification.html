@@ -45,7 +45,6 @@
 
     <!-- Begin slides. Just make elements with a class of slide. -->
 
-
     <section class="slide">
       <h2>Identification of human control during walking</h2>
       <h3>Jason K. Moore <small>j.k.moore19@csuohio.edu</small></h3>
@@ -67,9 +66,11 @@
     -->
 
     <section class="slide">
-      <h2>Collaborators</h2>
-      <h3>Sandra K. Hnat</h3>
-      <h3>Antonie J. van den Bogert</h3>
+      <h2>Background</h2>
+      <ul>
+        <li>Doctoral work on identification of the human controller in the
+          bicycle balancing task (UC Davis 2009-2012, TU Delft 2008-2009)</li>
+      </ul>
     </section>
 
     <section class="slide">
@@ -90,15 +91,17 @@
               <li>Balance</li>
             </ul>
             <h3>Additional Benefits</h3>
-            <p>Quantification of control can possibly be used to assess
-            subjects</p>
+            <ul>
+              <li>Quantification of control can possibly be used to assess
+                subjects</li>
+            </ul>
           </td>
         <tr>
       </table>
-      <p><small>Clips collected from <a href="http://youtu.be/-bYYmZNxaZk">one</a>, <a
-          href="http://youtu.be/bhCAkUMQ5GA">two</a>, <a
-          href="http://youtu.be/XpVVEYOkj34">three</a>, and <a
-          href="http://youtu.be/SS1MFoz1Cp0">four</a>.</small></p>
+      <p><small>Clips collected from <a href="http://youtu.be/-bYYmZNxaZk">[1]</a>, <a
+          href="http://youtu.be/bhCAkUMQ5GA">[2]</a>, <a
+          href="http://youtu.be/XpVVEYOkj34">[3]</a>, and <a
+          href="http://youtu.be/SS1MFoz1Cp0">[4]</a>.</small></p>
       <!--
       http://youtu.be/-bYYmZNxaZk
       http://youtu.be/bhCAkUMQ5GA
@@ -115,29 +118,45 @@
     in identifying control schemes used by able-bodied walkers and mapping
     those to the CPU, sensor and actuator network inside these powered
     exoskeletons.
+
+    So how do we make these devices behave more like a human:
+
+    Optimal Control? Do we do things optimally? Maybe, but probably not always.
+    Use data to figure out how a human actually controls: defects and all.
     -->
 
     <section class="slide">
-      <h2>Nueromuscluar System</h2>
+      <h2>Prior Art</h2>
+      <p>
+      <ul>
+        <li>Identification during standing: quite a lot</li>
+        <li>Identification during gait: not so much Rouse, Hof</li>
+        <li>Identification of active and passive dynamics in limb movement:
+          fair amount, Kearney et.al, etc</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Rouse</h2>
+    </section>
+
+    <section class="slide">
+      <h2>Neuromuscular System</h2>
       <img src="img/kearney-1990-control-diagram.png" />
       <footer style="position:absolute;bottom:0;font-size:75%;">
         Kearney and Hunter, “System Identification of Human Joint Dynamics.”,
       1990.
       </footer>
     </section>
-
-    <section class="slide">
-      <h2>Idealized Gait Feedback Control</h2>
-      <img src="img/control-system-words.png" />
-    </section>
     <!--
-    We start by modeling the human during cyclic walking as a
-    multi-input/output feeback system. The human plant is driven by joint
-    torques and can be perturbed by external inputs. The state is sensed, the
-    kinematics in our case, and subtracted from a nominal or open loop solution
-    to cyclic gait. The controller then computes the additive inputs to the
-    nominal or open loop joint torques to drive the walker back to the nominal
-    cyclic walking pattern.
+    Limb dynamics: newton's 2nd law
+    External torques: from environment interaction
+    Articular mechanics: visoelastic properties of joint surface, ligaments,
+    and connective tissue, generally small but large at extended range of
+    motion
+    Muscle mechanics: contraticle dynamics (non-linear spring) and activation dynamics (reflex or
+    voluntary activation)
+    Reflex effects: muscle spindles, golgi tendon
     -->
 
     <section class="slide">
@@ -166,6 +185,14 @@
       </table>
     </section>
     <!--
+    We start by modeling the human during cyclic walking as a
+    multi-input/output feeback system. The human plant is driven by joint
+    torques and can be perturbed by external inputs. The state is sensed, the
+    kinematics in our case, and subtracted from a nominal or open loop solution
+    to cyclic gait. The controller then computes the additive inputs to the
+    nominal or open loop joint torques to drive the walker back to the nominal
+    cyclic walking pattern.
+
     We approach the identification of the controller from a direct
     identification-like method. We assume that we can have good "measured"
     estimates of the joint angles, rates, and torques throughout the phase of
@@ -176,32 +203,36 @@
     -->
 
     <section class="slide">
-      <h2>Typical Gait Lab Measurements</h2>
+      <h2>Typical Dynamic Gait Lab Measurements</h2>
       <ul>
         <li>Ground reaction loads at each foot</li>
         <li>Inertial musculoskeletal marker positions</li>
-        <li>Body Segment Parameters</li>
         <li>Body segment angular velocity</li>
         <li>Point accelerations</li>
         <li>Muscle activation: EMG</li>
-        <li>Walking (or belt) speed</li>
+        <li>Travel (or belt) speed</li>
       </ul>
-      <h2>Estimates</h2>
+      <h2>Computed Estimates</h2>
       <ul>
         <li>Joint torques</li>
         <li>Joint angles, angular velocities, angular accelerations</li>
-        <li></li>
+        <li>Muscle forces, lengths</li>
+        <li>Center of pressure</li>
       </ul>
     </section>
+    <!--
+    Modern gait labs can measure the above dynamic variables
+    -->
 
     <section class="slide">
       <h2>What sensors are likely most important for human gait control?</h2>
       <ul>
-        <li>Proprioception: relative position of body parts, msucle spindles</li>
-        <li>Vestibular: semicircular canal: sangular rotation, oritlith: linear
-        acceleration (horizontal and veritical), gravity: all of
-        the head, , </li>
-        <li>Sight: earth relative position, etc</li>
+        <li>Proprioception (muscle spindles, Golgi tendon): relative position of body
+            parts, muscle tension (gait timing)</li>
+        <li>Vestibular (semicircular canals, otoliths): angular rotation and
+          rate, linear acceleration (horizontal and vertical), gravity
+          direction</li>
+        <li>Sight: global and body relative orientation, position</li>
         <li>Touch: force on feet</li>
       </ul>
       <h2>Sensors available to external prosthetics</h2>
@@ -209,23 +240,60 @@
         <li>Relative joint position</li>
         <li>Body fixed angular velocity</li>
         <li>Body fixed point accelerations</li>
-        <li>Force transducers and presssure sensors</li>
+        <li>Force transducers and pressure sensors</li>
       </ul>
     </section>
 
     <section class="slide">
       <h2>Closed Loop System Identification</h2>
       <p>Closed loop system id is possible, but one must be aware of several
-      issues. There are three common methods:</p>
+      issues. Here are two common methods:</p>
       <ul>
-        <li>Direct Approach</li>
-        <li>Indirect Approach</li>
-        <li>Joint Input-Output Approach</li>
+        <li>Direct Approach: measure \(u\), \(y\) where \(P\) and \(C\) are unknown</li>
+        <li>Indirect Approach: measure \(r\), \(y\) where either \(P\) or \(C\)
+        is known</li>
       </ul>
-      <p>If the direct method is used the external perturbations must be high
-      enough to bias the identification towards the controller, rather than the
-      inverse of the plant. (Kearny 1990, van der Kooij 2005)</p>
+      <img src="img/simple-control-block-diagram.png" />
     </section>
+
+    <section class="slide">
+      <h2>Direct Approach</h2>
+      <p>Measure \(u(t)\) and \(y(t)\), ignore feedback, and fit a model to the
+      data.</p>
+      <p>If the direct method is used in the frequency domain the external
+      perturbations must be high enough to bias the identification towards the
+      controller, rather than the inverse of the plant. (Kearny 1990, Ljung
+      1999, van der Kooij 2005)</p>
+      <p>
+      \[ G(s) = \frac{y(s)}{u(s)} =
+        \frac{P(s) \Phi_r(\omega) - C(s) \Phi_v(\omega)}
+             {\Phi_r(\omega) + |C(s)|^2 \Phi_v(\omega)}
+      \]
+      </p>
+      <p>
+        If \( \Phi_r(w) >> \Phi_v(\omega) \) : \( G = P \)
+      </p>
+      <p>
+        If \( \Phi_v(w) >> \Phi_r(\omega) \) : \( G = -\frac{1}{C} \)
+      </p>
+    </section>
+
+    <section class="slide">
+      <h2>Direct Approach</h2>
+      <p>But time domain identification may be possible if the bias is reduced
+        by one or all of the following:</p>
+      <ul>
+        <li>The closed loop data is informative (\(r\) is persistently
+        excited)</li>
+        <li>Nonlinear or time varying or complex (high order) regulators
+          will yield informative enough data.</li>
+        <li>Using suitable prefiltering, i.e. inclusion of a good noise model</li>
+        <li>Reducing the feedback contribution to the input spectrum \(\Phi
+        u\)</li>
+        <li>Increasing the signal to noise ratio</li>
+      </ul>
+    </section>
+
 
     <section class="slide">
       <h2>Controller Equations</h2>
@@ -267,7 +335,7 @@
     -->
 
     <section class="slide">
-      <h2>Map Human Control to Exoskeleton</h2>
+      <h2>Gain Matrix</h2>
       <h3>Sensors</h3>
       <p>Assume that a lower limb exoskeleton can sense relative orientation
       and rate of the right and left planar ankle, knee, and hip angles.</p>
@@ -306,22 +374,21 @@
 
     <section class="slide">
       <h2>Linear Least Squares</h2>
-      <p>With \(n\) time samples in each gait cycle and \(m\) steps there are
-      \(mnq\) equations and  which can be used to solve for the \(nq(2q+1)\)
+      <p>With \(n\) time samples in each gait cycle and \(m\) cycles there are
+      \(mnq\) equations and  which can be used to solve for the \(nq(p+1)\)
       unknowns: \(\mathbf{m}^*(\varphi)\) and \(\mathbf{K}(\varphi)\). This is
       a classic overdetermined system of linear equations that can be solved
       with linear least squares.</p>
       <p>
         \[\mathbf{A}\mathbf{x}=\mathbf{b}\]
+        \[\hat{\mathbf{x}}=(\mathbf{A}^T\mathbf{A})^{-1}\mathbf{A}^T\mathbf{b}\]
       </p>
       <ul>
-        <li>\(\mathbf{A}\): joint angles and rates</li>
-        <li>\(\mathbf{b}\): joint torques</li>
-        <li>\(\mathbf{x}\): \(\mathbf{K}\) and \(\mathbf{m}^*\)</li>
+        <li>\(n=20,m\sim=400,q=6,p=12\)</li>
+        <li>\(\mathbf{A}\) (48000 x 1560): joint angles and rates</li>
+        <li>\(\mathbf{b}\) (48000 x 1): joint torques</li>
+        <li>\(\mathbf{x}\) (1560 x 1): \(\mathbf{K}(\varphi)\) and \(\mathbf{m}^*(\varphi)\)</li>
       </ul>
-      <p>
-        \[\mathbf{x}=(\mathbf{A}^T\mathbf{A})^{-1}\mathbf{A}^T\mathbf{b}\]
-      </p>
     </section>
     <!--
     Given that we can estimate the joint angles, rates, and torques from mocap
@@ -336,15 +403,15 @@
         <li>Full body 3D motion capture: 47 markers <a href="#footnote-1">[1]</a></li>
         <li>Dual 6 DoF force plates</li>
         <li>2 minutes of unperturbed walking</li>
-        <li>8 minutes (500+ steps) of longtidunal perturbations</li>
+        <li>8 minutes (~500 gait cycles) walking under longitudinal perturbations</li>
         <li>Three walking speeds: 0.8, 1.2, 1.6 m/s</li>
-        <li>10+ subjects</li>
-        <li>Longitudinal perturbations</li>
+        <li>11 subjects (male: 7, female: 4)</li>
+        <li>Pseudo-random longitudinal perturbations: \(\pm 5\%\) nominal belt speed</li>
       </ul>
 
       <footer style="position:absolute;bottom:0;font-size:75%;">
         <p id="footnote-1">[1] Bogert et al., “A Real-Time System for Biomechanical
-          Analysis of Human Movement and Muscle Function.”</p>
+          Analysis of Human Movement and Muscle Function”, 2013.</p>
       </footer>
     </section>
     <!--
@@ -398,12 +465,20 @@
 
     <section class="slide">
       <h2>Measurement Variations</h2>
-      <img src="img/right-angle-variation-T019.png" />
+      <table class="side-by-side">
+        <tr>
+          <td>
+            <img src="img/ankle-cycles-normal-walking.png" />
+            <p>Unperturbed</p>
+          </td>
+          <td>
+            <img src="img/ankle-cycles-perturbed-walking.png" />
+            <p>Perturbed</p>
+          </td>
+        </tr>
+      </table>
     </section>
-    <section class="slide">
-      <h2>Measurement Variations</h2>
-      <img src="img/right-moment-variation-T019.png" />
-    </section>
+
     <!--
     Our 2D kinematic and kinetic estimates for each step look something like
     this. Notice that the variation in the step is much larger than unperturbed
@@ -436,6 +511,11 @@
     -->
 
     <section class="slide">
+      <h2>Gains: v=1.2 m/s</h2>
+      <img src="img/mean-gains-1.6.png" />
+    </section>
+
+    <section class="slide">
       <h2>Gain variation with speed</h2>
       <img src="img/mean-gains-vs-speed.png" />
     </section>
@@ -464,13 +544,28 @@
     -->
 
     <section class="slide">
+      <h2>Model Fit Improvements With Control</h2>
+        <ul>
+          <li>Identify \(\mathbf{m}^*\): \(mq\) parameters, VAF 70%</li>
+          <li>Identify \(\mathbf{m}^*\) and joint isolated \(\mathbf{K}\): \(3mq\) parameters, VAF
+          75%</li>
+          <li>Identify \(\mathbf{m}^*\) and \(\mathbf{K}\): \(mq(p+1)\) parameters, VAF
+          79%</li>
+        </ul>
+    </section>
+
+    <section class="slide">
       <h2>Summary</h2>
       <ul>
-        <li>Perturbations must be significantly higher that internal system
+        <li>External perturbations must be significantly higher that internal system
         noise to have any hope of estimating control in this fashion.</li>
         <li>Similar gain patterns in each leg.</li>
         <li>Similar gain patterns and magnitudes in different subjects.</li>
+        <li>The gains are low magnitude in the swing phase and higher in
+        magnitude in the stance phase.</li>
+        <li>Negative velocity gains do not make sense</li>
         <li>The model can predict the joint torques for independent data.</li>
+        <li>Can we put this controller into an exoskeleton?</li>
       </ul>
     </section>
     <!--
@@ -480,6 +575,39 @@
     in the gains across subjects and are able to predict joint torques very
     well.
     -->
+
+    <section class="slide">
+      <h2>Indirect Identification: Shooting</h2>
+      <p>Simulation + Genetic Algorithms, requires musculoskeletal model</p>
+      <h3>Cost Function</h3>
+      <p>
+        \[ J = \frac{1}{w_1}\sum || y - y_m || + \frac{1}{w_2}\sum ||u|| \]
+      </p>
+      <p>Genetic Algorithms</p>
+      <ul>
+        <li>CMAES is popular</li>
+      </ul>
+      <p>Free parameters</li>
+      <p>
+      <p>Wang 2010: 50 cores, real time simulation, 3000 iterations of CMAES,
+        10 s simulation duration: 10 hour computation time</p>
+      <p>Disadvantanges: 8 minute simulation would take ~400 hrs: need the
+      simluation to run 40x faster than realtime</p>
+
+    </section>
+
+    <section class="slide">
+      <h2>Indirect Identification: Direct Collocation</h2>
+      <h3>Cost Function</h3>
+      <p>
+        \[ J = \frac{1}{w_1} \sum || y - y_m || \]
+      </p>
+      <h3>Constraints</h3>
+      <p>
+        \[ 0 = f(\dot{x}, x, u, t) \]
+      </p>
+    </section>
+
 
     <section class="slide">
       <h2>Future</h2>
@@ -503,23 +631,6 @@
     -->
 
     <section class="slide">
-      <h2>Tutorial</h2>
-      <h3>Simulation and Control of Biomechanical Systems with Python</h3>
-      <p>Tonight at 6pm</p>
-      <p>Chemistry Computer Lab in the Whitby building on the 2nd floor. Next
-      to ASEC (previous location).</p>
-      <a
-        href="https://github.com/pydy/pydy-tutorial-pycon-2014">https://github.com/pydy/pydy-tutorial-pycon-2014</a>
-      <img src="img/human-balance-diagram.png" />
-    </section>
-    <!--
-    Here is a quick plug for the tutorial we will be giving tonight on
-    simulation and control of biomechanical systems using the Python
-    programming language. There may be some slots left, talk to the conference
-    organizers if you are interested in joining.
-    -->
-
-    <section class="slide">
       <h2>Information</h2>
       <h3>Contact</h3>
       <ul>
@@ -540,6 +651,12 @@
       <ul>
         <li>On its way!</li>
       </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Collaborators</h2>
+      <h3>Sandra K. Hnat</h3>
+      <h3>Antonie J. van den Bogert</h3>
     </section>
 
 
