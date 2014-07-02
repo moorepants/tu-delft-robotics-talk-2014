@@ -159,7 +159,8 @@ Optimal control approach
 - Announcement about tutorial
 
 
-DW2014 discussion talk
+DW2014
+======
 
 - Is this a good way to design a feedback controller for walking?
 - Present our idea
@@ -172,8 +173,67 @@ DW2014 discussion talk
   try to do what people do?
 - zero moment point, simbicon
 - How do people actually respond to pertrubations?
-- Infinity of controllers can produce the same jont and torque curves.
+- An infinite number of controllers can produce the same jont and torque curves.
 - Do robotos use k
 
 TODO
 - Move Mathjax lib into this directory
+
+Introduction
+------------
+
+What kind of control do you we use in gait?
+-------------------------------------------
+
+- Zero moment point control: Asimo, etc
+- Optimal control: maximize stability, minimize energy?
+- Something else?
+- What can data from able-bodied humans tell us about the control mechanism
+  during gait?
+
+What kind of experiments can tell us something about human control during gait?
+-------------------------------------------------------------------------------
+
+- Can we come up with a holistic controller that resembles what humans actually
+  do, defects and all?
+
+Our goal
+--------
+
+- We're interested in improving the natural motion of powered prosthetics
+  and exoskeletons including addign balance.
+- We'd like to collect data from human's during gait, use a data driven
+  approach to generate control models
+- If we replace a human's leg with a powered prosthetic, how can we make it
+  behave like the leg it replaced without connections to the human's central
+  nervous system?
+
+Our Approach
+------------
+
+1. Collect lots of common gait data: many gait cycles
+2. Apply external perturbations to the human
+3. Assume a simple time varying linear MIMO control structure
+4. Find the best fit of the model to the data
+
+Let the data (and, of course, some hunches) tell us what the control mechanism is.
+
+Model Structure
+
+Show block diagram and the controller equations.
+
+Show linear least squares slide.
+
+Show video of walking on treadmill.
+
+Show resulting gains and one model fit.
+
+Other ideas:
+
+- Indirect identification: assume plant model, identify the closed loop system,
+  with controller as free parameters
+- Other control structures? How complex do they need to be if we are only
+  trying provide feedback for prosthetics? How complex for more basic
+  understanding of the control system.
+- What sensors are essential in a powered prosthetic to reproduce gait?
+- Subsystem identification?
