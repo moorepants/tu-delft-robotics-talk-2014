@@ -1,3 +1,6 @@
+This work is licensed under a `Creative Commons Attribution 4.0 International
+License <http://creativecommons.org/licenses/by/4.0/>`_.
+
 Outline
 =======
 
@@ -136,7 +139,7 @@ Optimal control approach
 
 1. Choose controller structure(s)
 2. Develop plant model
-3. Simulate model under 
+3. Simulate model under
 3. Cost function: minimize error in marker pos
 
 
